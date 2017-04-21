@@ -18,7 +18,7 @@ OBJDIR ?= build
 TMP_GOPATH=$(OBJDIR)/gopath
 GOBIN=$(TMP_GOPATH)/bin
 
-GOTOOLS = golint govendor goimports protoc-gen-go ginkgo gocov gocov-xml
+GOTOOLS = golint govendor goimports protoc-gen-gofast ginkgo gocov gocov-xml
 GOTOOLS_BIN = $(patsubst %,$(GOBIN)/%, $(GOTOOLS))
 
 # go tool->path mapping
@@ -35,12 +35,12 @@ install: $(GOTOOLS_BIN)
 	@mkdir -p $(BINDIR)
 	cp $^ $(BINDIR)
 
-# Special override for protoc-gen-go since we want to use the version vendored with the project
-gotool.protoc-gen-go:
-	@echo "Building github.com/golang/protobuf/protoc-gen-go -> protoc-gen-go"
-	@mkdir -p $(TMP_GOPATH)/src/github.com/golang/protobuf/
-	@cp -R $(GOPATH)/src/github.com/hyperledger/fabric/vendor/github.com/golang/protobuf/* $(TMP_GOPATH)/src/github.com/golang/protobuf
-	@GOPATH=$(abspath $(TMP_GOPATH)) go install github.com/golang/protobuf/protoc-gen-go
+# Special override for protoc-gen-gofast since we want to use the version vendored with the project
+gotool.protoc-gen-gofast:
+	@echo "Building github.com/gogo/protobuf/protoc-gen-gofast -> protoc-gen-gofast"
+	@mkdir -p $(TMP_GOPATH)/src/github.com/gogo/protobuf/
+	@cp -R $(GOPATH)/src/github.com/hyperledger/fabric/vendor/github.com/gogo/protobuf/* $(TMP_GOPATH)/src/github.com/gogo/protobuf
+	@GOPATH=$(abspath $(TMP_GOPATH)) go install github.com/gogo/protobuf/protoc-gen-gofast
 
 # Default rule for gotools uses the name->path map for a generic 'go get' style build
 gotool.%:

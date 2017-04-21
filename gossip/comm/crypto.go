@@ -26,7 +26,6 @@ import (
 	"math/big"
 	"net"
 	"os"
-	"time"
 
 	"github.com/hyperledger/fabric/common/util"
 	"golang.org/x/net/context"
@@ -110,8 +109,9 @@ func (c authCreds) Info() credentials.ProtocolInfo {
 	return c.tlsCreds.Info()
 }
 
-func (c *authCreds) ClientHandshake(addr string, rawConn net.Conn, timeout time.Duration) (_ net.Conn, _ credentials.AuthInfo, err error) {
-	conn, auth, err := c.tlsCreds.ClientHandshake(addr, rawConn, timeout)
+func (c *authCreds) ClientHandshake(context context.Context, addr string, rawConn net.Conn) (_ net.Conn, _ credentials.AuthInfo, err error) {
+//func (c *authCreds) ClientHandshake(addr string, rawConn net.Conn, timeout time.Duration) (_ net.Conn, _ credentials.AuthInfo, err error) {
+	conn, auth, err := c.tlsCreds.ClientHandshake(context, addr, rawConn)
 	if auth == nil && conn != nil {
 		auth = credentials.TLSInfo{State: conn.(*tls.Conn).ConnectionState()}
 	}
@@ -120,4 +120,12 @@ func (c *authCreds) ClientHandshake(addr string, rawConn net.Conn, timeout time.
 
 func (c *authCreds) ServerHandshake(rawConn net.Conn) (net.Conn, credentials.AuthInfo, error) {
 	return c.tlsCreds.ServerHandshake(rawConn)
+}
+
+func (c *authCreds) Clone() credentials.TransportCredentials {
+	return c.tlsCreds.Clone()
+}
+
+func (c *authCreds) OverrideServerName(newName string) (err error) {
+	return c.OverrideServerName(newName)
 }

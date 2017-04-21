@@ -179,7 +179,7 @@ build/docker/bin/%: $(PROJECT_FILES)
 build/bin:
 	mkdir -p $@
 
-build/docker/gotools/bin/protoc-gen-go: build/docker/gotools
+build/docker/gotools/bin/protoc-gen-gofast: build/docker/gotools
 
 build/docker/gotools: gotools/Makefile
 	@mkdir -p $@/bin $@/obj
@@ -201,7 +201,7 @@ build/bin/%: $(PROJECT_FILES)
 	@touch $@
 
 # payload definitions'
-build/image/ccenv/payload:      build/docker/gotools/bin/protoc-gen-go \
+build/image/ccenv/payload:      build/docker/gotools/bin/protoc-gen-gofast \
 				build/bin/chaintool \
 				build/goshim.tar.bz2
 build/image/javaenv/payload:    build/javashim.tar.bz2 \
@@ -216,7 +216,7 @@ build/image/orderer/payload:    build/docker/bin/orderer \
 				orderer/orderer.yaml \
 				common/configtx/tool/configtx.yaml
 build/image/buildenv/payload:   build/gotools.tar.bz2 \
-				build/docker/gotools/bin/protoc-gen-go
+				build/docker/gotools/bin/protoc-gen-gofast
 build/image/testenv/payload:    build/docker/bin/orderer \
 				orderer/orderer.yaml \
 				common/configtx/tool/configtx.yaml \
