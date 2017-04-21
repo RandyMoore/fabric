@@ -110,7 +110,6 @@ func (c authCreds) Info() credentials.ProtocolInfo {
 }
 
 func (c *authCreds) ClientHandshake(context context.Context, addr string, rawConn net.Conn) (_ net.Conn, _ credentials.AuthInfo, err error) {
-//func (c *authCreds) ClientHandshake(addr string, rawConn net.Conn, timeout time.Duration) (_ net.Conn, _ credentials.AuthInfo, err error) {
 	conn, auth, err := c.tlsCreds.ClientHandshake(context, addr, rawConn)
 	if auth == nil && conn != nil {
 		auth = credentials.TLSInfo{State: conn.(*tls.Conn).ConnectionState()}
@@ -126,6 +125,6 @@ func (c *authCreds) Clone() credentials.TransportCredentials {
 	return c.tlsCreds.Clone()
 }
 
-func (c *authCreds) OverrideServerName(newName string) (err error) {
-	return c.OverrideServerName(newName)
+func (c *authCreds) OverrideServerName(newName string) error {
+	return c.tlsCreds.OverrideServerName(newName)
 }
